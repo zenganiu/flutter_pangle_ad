@@ -36,10 +36,8 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
 
             splashAdView?.loadAdData()
             if let adview = splashAdView, let keyWindow = self.keyWindow {
-                
                 keyWindow.rootViewController?.view.addSubview(adview)
                 adview.rootViewController = keyWindow.rootViewController
-                
             }
         default:
             break
