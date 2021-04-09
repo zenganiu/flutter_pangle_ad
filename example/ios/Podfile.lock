@@ -1,0 +1,35 @@
+PODS:
+  - Ads-CN (3.4.4.3):
+    - Ads-CN/BUAdSDK (= 3.4.4.3)
+  - Ads-CN/BUAdSDK (3.4.4.3):
+    - Ads-CN/BUFoundation
+    - Ads-CN/Domestic
+  - Ads-CN/BUFoundation (3.4.4.3)
+  - Ads-CN/Domestic (3.4.4.3)
+  - Flutter (1.0.0)
+  - flutter_pangle_ad (0.0.1):
+    - Ads-CN (= 3.4.4.3)
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_pangle_ad (from `.symlinks/plugins/flutter_pangle_ad/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Ads-CN
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_pangle_ad:
+    :path: ".symlinks/plugins/flutter_pangle_ad/ios"
+
+SPEC CHECKSUMS:
+  Ads-CN: 57285da091f6a9035b78114c817f7e7fde8bff94
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_pangle_ad: cda588e2d2617c2a95797aaae14b8af39bd8e0d4
+
+PODFILE CHECKSUM: 1d62be80675f50e63eb2f851d55ee75f09951c1b
+
+COCOAPODS: 1.10.1
