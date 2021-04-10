@@ -30,4 +30,33 @@ class FlutterPangleAd {
       'needSplashZoomOutAd': needSplashZoomOutAd
     });
   }
+
+  /// 显示激励视频
+  ///
+  /// [slotID] 代码位ID
+  /// [userId] tag_id
+  /// [rewardName] 奖励名称
+  /// [rewardAmount] 奖励数量
+  /// [extra] 透传参数,应为json序列化后的字符串
+  static Future showRewardAd(
+      {@required String slotID,
+      String userId,
+      String rewardName,
+      int rewardAmount,
+      String extra}) async {
+    return await _channel.invokeMethod("rewardAd", {
+      'slotID': slotID,
+      'userId': userId,
+      'rewardName': rewardName,
+      'rewardAmount': rewardAmount,
+      'extra': extra
+    });
+  }
+
+  static Future showBannerAd({@required String slotID})async{
+    return await _channel.invokeMethod("bannerAd", {
+      'slotID': slotID,
+    });
+
+  }
 }

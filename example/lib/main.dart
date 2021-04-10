@@ -46,13 +46,37 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // Text('Running on: $_platformVersion\n')
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Plangle Ad example'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: SafeArea(
+          child: Container(
+            constraints: BoxConstraints.expand(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Running on: $_platformVersion\n'),
+                  OutlinedButton(
+                    onPressed: () {
+                      FlutterPangleAd.showSplashAd(slotID: "887394289");
+                    },
+                    child: Text('开屏广告'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () {
+                      FlutterPangleAd.showRewardAd(slotID: '945562374');
+                    },
+                    child: Text('激励视频'),
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
