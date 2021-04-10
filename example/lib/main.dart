@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    FlutterPangleAd.showSplashAd(slotID: "887394289");
+    //PangleAdPlugin.showSplashAd(slotID: "887394289");
     //initPlatformState();
   }
 
@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await FlutterPangleAd.platformVersion;
+      platformVersion = await PangleAdPlugin.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -63,15 +63,23 @@ class _MyAppState extends State<MyApp> {
                   Text('Running on: $_platformVersion\n'),
                   OutlinedButton(
                     onPressed: () {
-                      FlutterPangleAd.showSplashAd(slotID: "887394289");
+                      PangleAdPlugin.showSplashAd(slotID: "887394289");
                     },
                     child: Text('开屏广告'),
                   ),
                   OutlinedButton(
                     onPressed: () {
-                      FlutterPangleAd.showRewardAd(slotID: '945562374');
+                      PangleAdPlugin.showRewardAd(slotID: '945562374');
                     },
                     child: Text('激励视频'),
+                  ),
+                  
+                  Container(
+                    color: Colors.grey,
+                    width: 300,
+                    height: 300,
+                    margin: EdgeInsets.all(10),
+                    child: PangleAdBannerView(slotID: '945912085',),
                   )
                 ],
               ),

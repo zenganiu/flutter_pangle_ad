@@ -20,6 +20,9 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: "flutter_pangle_ad", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterPangleAdPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        
+        let factory = PlatformBannerViewFactory()
+        registrar.register(factory, withId: "PangleAdBannerView")
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -29,11 +32,12 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
             showSplashAd(call, result: result)
         case "rewardAd":
             showRewardAd(call, result: result)
+            
         default:
             break
         }
     }
-
+    
     // MARK: - - 显示激励视频
 
     private func showRewardAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
