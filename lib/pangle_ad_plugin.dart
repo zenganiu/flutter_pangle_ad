@@ -10,7 +10,11 @@ class PangleAdPlugin {
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
+
   }
+
+
+
 
   /// 显示开屏广告
   ///
@@ -29,6 +33,9 @@ class PangleAdPlugin {
       'tolerateTimeout': tolerateTimeout,
       'needSplashZoomOutAd': needSplashZoomOutAd
     });
+
+
+
   }
 
   /// 显示激励视频

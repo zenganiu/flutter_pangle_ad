@@ -27,7 +27,16 @@ class PlatformBannerView: NSObject, FlutterPlatformView {
             return label
         }
 
-        let banner = BUNativeExpressBannerView(slotID: slotID, rootViewController: rootVC, adSize: CGSize.init(width: 300, height: 300))
+        var viewWidth: Double = 300
+        var viewHeight: Double = 300
+        if let w = args["viewWidth"] as? NSNumber {
+            viewWidth = w.doubleValue
+        }
+        if let h = args["viewHeight"] as? NSNumber {
+            viewHeight = h.doubleValue
+        }
+
+        let banner = BUNativeExpressBannerView(slotID: slotID, rootViewController: rootVC, adSize: CGSize(width: viewWidth, height: viewHeight))
         banner.loadAdData()
         return banner
     }

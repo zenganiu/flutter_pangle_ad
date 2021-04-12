@@ -13,15 +13,23 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String _platformVersion = 'Unknown';
+  static const EventChannel _eventChannel = EventChannel('flutter_111');
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('123123 $state');
+    super.didChangeAppLifecycleState(state);
+  }
 
   @override
   void initState() {
     super.initState();
-
-    //PangleAdPlugin.showSplashAd(slotID: "887394289");
-    //initPlatformState();
+    initPlatformState();
+    _eventChannel.receiveBroadcastStream().listen((event) {
+      print(event);
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -60,7 +68,10 @@ class _MyAppState extends State<MyApp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Running on: $_platformVersion\n'),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    child: Text('Running on: $_platformVersion\n'),
+                  ),
                   OutlinedButton(
                     onPressed: () {
                       PangleAdPlugin.showSplashAd(slotID: "887394289");
@@ -68,18 +79,23 @@ class _MyAppState extends State<MyApp> {
                     child: Text('开屏广告'),
                   ),
                   OutlinedButton(
-                    onPressed: () {
-                      PangleAdPlugin.showRewardAd(slotID: '945562374');
+                    onPressed: () async {
+                      var result = await PangleAdPlugin.showRewardAd(
+                          slotID: '945562374');
+                      print('123123 $result');
                     },
                     child: Text('激励视频'),
                   ),
-                  
                   Container(
                     color: Colors.grey,
                     width: 300,
-                    height: 300,
+                    height: 130,
                     margin: EdgeInsets.all(10),
-                    child: PangleAdBannerView(slotID: '945912085',),
+                    child: PangleAdBannerView(
+                      slotID: '945912085',
+                      viewHeight: 130,
+                      viewWidth: 300,
+                    ),
                   )
                 ],
               ),

@@ -3,6 +3,9 @@ import Flutter
 import UIKit
 
 public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
+    /// 通道名称
+    static let channelName = "flutter_pangle_ad"
+
     /// 开屏广告
     var splashAdView: BUSplashAdView?
 
@@ -12,32 +15,52 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
     /// 根视图
     var rootViewController: UIViewController?
 
-    /// keywinow
-    var keyWindow: UIWindow?{
-       return UIApplication.shared.windows.first
+    /// 主窗口
+    var keyWindow: UIWindow? {
+        return UIApplication.shared.windows.first
     }
+
+    var rewardResult: FlutterResult?
+
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "flutter_pangle_ad", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: channelName, binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterPangleAdPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
-        
+
         let factory = PlatformBannerViewFactory()
+        /// 注册视图，与UiKitView中viewType对应
         registrar.register(factory, withId: "PangleAdBannerView")
+
+        // registrar.addApplicationDelegate(instance)
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
+        case "getPlatformVersion":
+            getPlatformVersion(call, result: result)
+
         case "splashAd":
 
             showSplashAd(call, result: result)
         case "rewardAd":
+
             showRewardAd(call, result: result)
-            
+
         default:
             break
         }
     }
-    
+
+    // MARK: - - 获取平台、系统版本
+
+    private func getPlatformVersion(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let system = UIDevice.current.systemName
+        let version = UIDevice.current.systemVersion
+        let platformVersion = "\(system) \(version)"
+
+        result(platformVersion)
+    }
+
     // MARK: - - 显示激励视频
 
     private func showRewardAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -52,7 +75,7 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
 
         let userId = args["userId"] as? String ?? ""
         let rewardName = args["rewardName"] as? String ?? ""
-        let rewardAmount = args["rewardAmount"] as? Int ?? 0
+        let rewardAmount = (args["rewardAmount"] as? NSNumber ?? NSNumber(value: 0)).intValue
         let extra = args["extra"] as? String ?? ""
 
         let model = BURewardedVideoModel()
@@ -61,10 +84,11 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         model.rewardAmount = rewardAmount
         model.extra = extra
 
+        rewardResult = result
         let ad = BUNativeExpressRewardedVideoAd(slotID: aslotID, rewardedVideoModel: model)
         ad.delegate = self
         ad.loadData()
-        self.rewardedAd = ad
+        rewardedAd = ad
     }
 
     // MARK: - - 显示开屏广告
@@ -95,7 +119,7 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
     }
 }
 
-// MARK: - - BUSplashAdDelegate
+// MARK: - - 开屏广告Delegate
 
 extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
     public func removeSplashAdView() {
@@ -118,7 +142,7 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
     }
 }
 
-// MARK: - - BUNativeExpressRewardedVideoAdDelegate
+// MARK: - - 激励视频Delegate
 
 extension SwiftFlutterPangleAdPlugin: BUNativeExpressRewardedVideoAdDelegate {
     // 返回的错误码(error)表示广告加载失败的原因
@@ -131,8 +155,8 @@ extension SwiftFlutterPangleAdPlugin: BUNativeExpressRewardedVideoAdDelegate {
 
     // 广告素材物料加载成功
     public func nativeExpressRewardedVideoAdDidLoad(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        guard let window = self.keyWindow,let rootVC = window.rootViewController else{return}
-        self.rewardedAd?.show(fromRootViewController: rootVC)
+        guard let window = keyWindow, let rootVC = window.rootViewController else { return }
+        rewardedAd?.show(fromRootViewController: rootVC)
     }
 
     // 视频下载完成
@@ -141,6 +165,7 @@ extension SwiftFlutterPangleAdPlugin: BUNativeExpressRewardedVideoAdDelegate {
 
     // 用户关闭广告时会触发此回调，注意：任何广告的关闭操作必须用户主动触发
     public func nativeExpressRewardedVideoAdDidClose(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
+        rewardResult?("AdDidClose")
     }
 
     // 点击回调方法
