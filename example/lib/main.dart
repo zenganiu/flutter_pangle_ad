@@ -15,11 +15,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String _platformVersion = 'Unknown';
-  static const EventChannel _eventChannel = EventChannel('flutter_111');
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('123123 $state');
     super.didChangeAppLifecycleState(state);
   }
 
@@ -27,9 +25,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     initPlatformState();
-    _eventChannel.receiveBroadcastStream().listen((event) {
-      print(event);
-    });
+    PangleAdPlugin.initialSDK(appId: "5112108",logLevel: 2);
+    PangleAdPlugin.loadRewardAd(slotID: '945562374');
+    PangleAdPlugin.loadSplashAd(slotID: '887394289');
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.

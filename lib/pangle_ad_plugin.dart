@@ -34,7 +34,7 @@ class PangleAdPlugin {
       bool hideSkipButton = false,
       double tolerateTimeout = 3.5,
       bool needSplashZoomOutAd = false}) async {
-    return await _channel.invokeMethod("splashAd", {
+    return await _channel.invokeMethod("showSplashAd", {
       'slotID': slotID,
       'hideSkipButton': hideSkipButton,
       'tolerateTimeout': tolerateTimeout,
@@ -53,7 +53,7 @@ class PangleAdPlugin {
       bool hideSkipButton = false,
       double tolerateTimeout = 3.5,
       bool needSplashZoomOutAd = false}) async {
-    return await _channel.invokeMethod("splashAd", {
+    return await _channel.invokeMethod("loadSplashAd", {
       'slotID': slotID,
       'hideSkipButton': hideSkipButton,
       'tolerateTimeout': tolerateTimeout,
@@ -74,7 +74,7 @@ class PangleAdPlugin {
       String rewardName,
       int rewardAmount,
       String extra}) async {
-    return await _channel.invokeMethod("rewardAd", {
+    return await _channel.invokeMethod("showRewardAd", {
       'slotID': slotID,
       'userId': userId,
       'rewardName': rewardName,
@@ -96,7 +96,7 @@ class PangleAdPlugin {
       String rewardName,
       int rewardAmount,
       String extra}) async {
-    return await _channel.invokeMethod("rewardAd", {
+    return await _channel.invokeMethod("loadRewardAd", {
       'slotID': slotID,
       'userId': userId,
       'rewardName': rewardName,

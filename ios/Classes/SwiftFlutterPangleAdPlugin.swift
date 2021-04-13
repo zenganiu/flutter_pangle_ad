@@ -41,13 +41,18 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         case "getPlatformVersion":
             getPlatformVersion(call, result: result)
 
-        case "splashAd":
-
+        case "showSplashAd":
             showSplashAd(call, result: result)
-        case "rewardAd":
+        case "loadSplashAd":
+            
+            break
+            
+            
+        case "showRewardAd":
 
             showRewardAd(call, result: result)
-
+        case "loadRewardAd":
+            break
         default:
             break
         }
@@ -114,7 +119,30 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         ad.loadData()
         rewardedAd = ad
     }
+    // MARK: - - 加载激励视频
+    private func loadRewardAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let arguments = call.arguments as? [String: Any]
+        guard let args = arguments, let slotID = args["slotID"] as? String else {
+            return
+        }
 
+        let userId = args["userId"] as? String ?? ""
+        let rewardName = args["rewardName"] as? String ?? ""
+        let rewardAmount = (args["rewardAmount"] as? NSNumber ?? NSNumber(value: 0)).intValue
+        let extra = args["extra"] as? String ?? ""
+
+        let model = BURewardedVideoModel()
+        model.userId = userId
+        model.rewardName = rewardName
+        model.rewardAmount = rewardAmount
+        model.extra = extra
+
+        rewardResult = result
+        let ad = BUNativeExpressRewardedVideoAd(slotID: slotID, rewardedVideoModel: model)
+        //ad.delegate = self
+        ad.loadData()
+        rewardedAd = ad
+    }
     // MARK: - - 显示开屏广告
 
     private func showSplashAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -136,6 +164,25 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
             splashAdView = ad
         }
     }
+    
+    // MARK: - - 加载开屏广告
+    private func loadSplashAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        let arguments = call.arguments as? [String: Any]
+        guard let args = arguments, let slotID = args["slotID"] as? String else {
+            return
+        }
+
+        BUAdSDKManager.setIsPaidApp(false)
+        let ad = BUSplashAdView(slotID: slotID, frame: UIScreen.main.bounds)
+        ad.tolerateTimeout = 10
+        ad.needSplashZoomOutAd = true
+        //ad.delegate = self
+        ad.loadAdData()
+        
+        
+    }
+    
 }
 
 // MARK: - - 开屏广告Delegate
