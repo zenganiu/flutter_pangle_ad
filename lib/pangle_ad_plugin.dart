@@ -7,14 +7,24 @@ class PangleAdPlugin {
   static const MethodChannel _channel =
       const MethodChannel('flutter_pangle_ad');
 
+
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
 
   }
 
+  /// 初始化配置
+  ///
+  /// [appId] 穿山甲AppId
+  /// [logLevel] 0-None,1-Error,2-Debug
+  static Future<bool> initialSDK({@required String appId,int logLevel = 0}) async {
+    return await _channel.invokeMethod("initialSDK", {
+      'appId': appId,
+      'logLevel': logLevel
+    });
 
-
+  }
 
   /// 显示开屏广告
   ///

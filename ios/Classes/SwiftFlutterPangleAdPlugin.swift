@@ -36,6 +36,8 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
+        case "initialSDK":
+            initialSDK(call, result: result)
         case "getPlatformVersion":
             getPlatformVersion(call, result: result)
 
@@ -49,6 +51,32 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         default:
             break
         }
+    }
+
+    private func initialSDK(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let arguments = call.arguments as? [String: Any]
+        guard let args = arguments, let appId = args["appId"] as? String else {
+            return
+        }
+
+        var level: BUAdSDKLogLevel = .none
+        if let logLevel = args["logLevel"] as? NSNumber {
+            let num = logLevel.intValue
+
+            switch num {
+            case 0:
+                level = .none
+            case 1:
+                level = .error
+            case 2:
+                level = .debug
+            default:
+                break
+            }
+        }
+
+        BUAdSDKManager.setAppID(appId)
+        BUAdSDKManager.setLoglevel(level)
     }
 
     // MARK: - - 获取平台、系统版本
@@ -65,11 +93,7 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
 
     private func showRewardAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String: Any]
-        guard let args = arguments else {
-            return
-        }
-        let slotID = args["slotID"] as? String
-        guard let aslotID = slotID else {
+        guard let args = arguments, let slotID = args["slotID"] as? String else {
             return
         }
 
@@ -85,7 +109,7 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         model.extra = extra
 
         rewardResult = result
-        let ad = BUNativeExpressRewardedVideoAd(slotID: aslotID, rewardedVideoModel: model)
+        let ad = BUNativeExpressRewardedVideoAd(slotID: slotID, rewardedVideoModel: model)
         ad.delegate = self
         ad.loadData()
         rewardedAd = ad
@@ -95,18 +119,13 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
 
     private func showSplashAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String: Any]
-        guard let args = arguments else {
-            return
-        }
-        let slotID = args["slotID"] as? String
-        guard let aslotID = slotID else {
+        guard let args = arguments, let slotID = args["slotID"] as? String else {
             return
         }
 
-        BUAdSDKManager.setLoglevel(.debug)
         BUAdSDKManager.setIsPaidApp(false)
 
-        let ad = BUSplashAdView(slotID: aslotID, frame: UIScreen.main.bounds)
+        let ad = BUSplashAdView(slotID: slotID, frame: UIScreen.main.bounds)
         ad.tolerateTimeout = 10
         ad.needSplashZoomOutAd = true
         ad.delegate = self
