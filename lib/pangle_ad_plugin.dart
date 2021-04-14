@@ -29,7 +29,7 @@ class PangleAdPlugin {
   /// [hideSkipButton] 是否自定义跳过按钮 BOOL类型 默认为NO
   /// [tolerateTimeout] 默认超时时间为3.5s
   /// [needSplashZoomOutAd] 是否需要点睛广告 默认为NO
-  static Future<bool> showSplashAd(
+  static Future showSplashAd(
       {@required String slotID,
       bool hideSkipButton = false,
       double tolerateTimeout = 3.5,
@@ -48,7 +48,7 @@ class PangleAdPlugin {
   /// [hideSkipButton] 是否自定义跳过按钮 BOOL类型 默认为NO
   /// [tolerateTimeout] 默认超时时间为3.5s
   /// [needSplashZoomOutAd] 是否需要点睛广告 默认为NO
-  static Future<bool> loadSplashAd(
+  static Future loadSplashAd(
       {@required String slotID,
       bool hideSkipButton = false,
       double tolerateTimeout = 3.5,

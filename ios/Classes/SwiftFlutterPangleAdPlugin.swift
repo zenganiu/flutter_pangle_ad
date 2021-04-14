@@ -6,8 +6,14 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
     /// 通道名称
     static let channelName = "flutter_pangle_ad"
 
+    private let showSplashAdTag: Int = 999
+    private let loadSplashAdTag: Int = 998
+    private let showRewardAdTag: Int = 997
+    private let loadRewardAdTag: Int = 996
+
     /// 开屏广告
-    var splashAdView: BUSplashAdView?
+    var showSplashAdView: BUSplashAdView?
+    var loadSplashAdView: BUSplashAdView?
 
     /// 激励视频
     var rewardedAd: BUNativeExpressRewardedVideoAd?
@@ -20,7 +26,10 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         return UIApplication.shared.windows.first
     }
 
-    var rewardResult: FlutterResult?
+    var showSplashAdResult: FlutterResult?
+    var loadSplashAdResult: FlutterResult?
+    var showRewardResult: FlutterResult?
+    var loadRewardResult: FlutterResult?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: channelName, binaryMessenger: registrar.messenger())
@@ -37,22 +46,29 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "initialSDK":
+
             initialSDK(call, result: result)
+
         case "getPlatformVersion":
+
             getPlatformVersion(call, result: result)
 
         case "showSplashAd":
+
             showSplashAd(call, result: result)
+
         case "loadSplashAd":
-            
-            break
-            
-            
+
+            loadSplashAd(call, result: result)
+
         case "showRewardAd":
 
             showRewardAd(call, result: result)
+
         case "loadRewardAd":
-            break
+
+            loadRewardAd(call, result: result)
+
         default:
             break
         }
@@ -113,13 +129,15 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         model.rewardAmount = rewardAmount
         model.extra = extra
 
-        rewardResult = result
+        showRewardResult = result
         let ad = BUNativeExpressRewardedVideoAd(slotID: slotID, rewardedVideoModel: model)
         ad.delegate = self
         ad.loadData()
         rewardedAd = ad
     }
+
     // MARK: - - 加载激励视频
+
     private func loadRewardAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String: Any]
         guard let args = arguments, let slotID = args["slotID"] as? String else {
@@ -137,12 +155,13 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         model.rewardAmount = rewardAmount
         model.extra = extra
 
-        rewardResult = result
+        loadRewardResult = result
         let ad = BUNativeExpressRewardedVideoAd(slotID: slotID, rewardedVideoModel: model)
-        //ad.delegate = self
+        // ad.delegate = self
         ad.loadData()
         rewardedAd = ad
     }
+
     // MARK: - - 显示开屏广告
 
     private func showSplashAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -157,17 +176,20 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         ad.tolerateTimeout = 10
         ad.needSplashZoomOutAd = true
         ad.delegate = self
+        ad.tag = showSplashAdTag
+        showSplashAdResult = result
+
         ad.loadAdData()
         if let keyWindow = self.keyWindow {
             keyWindow.rootViewController?.view.addSubview(ad)
             ad.rootViewController = keyWindow.rootViewController
-            splashAdView = ad
+            showSplashAdView = ad
         }
     }
-    
+
     // MARK: - - 加载开屏广告
+
     private func loadSplashAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        
         let arguments = call.arguments as? [String: Any]
         guard let args = arguments, let slotID = args["slotID"] as? String else {
             return
@@ -177,34 +199,50 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         let ad = BUSplashAdView(slotID: slotID, frame: UIScreen.main.bounds)
         ad.tolerateTimeout = 10
         ad.needSplashZoomOutAd = true
-        //ad.delegate = self
+        ad.tag = loadSplashAdTag
+        ad.delegate = self
+        loadSplashAdResult = result
+        loadSplashAdView = ad
         ad.loadAdData()
-        
-        
     }
-    
 }
 
 // MARK: - - 开屏广告Delegate
 
 extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
-    public func removeSplashAdView() {
-        guard let _ = splashAdView else { return }
-        splashAdView?.removeFromSuperview()
+    public func removeShowSplashAdView() {
+        guard let _ = showSplashAdView else { return }
+        showSplashAdView?.removeFromSuperview()
+        showSplashAdView = nil
     }
-
+    public func removeLoadSplashAdView() {
+        guard let _ = loadSplashAdView else { return }
+        loadSplashAdView = nil
+    }
     // 广告加载成功回调
     public func splashAdDidLoad(_ splashAd: BUSplashAdView) {
-        print("广告加载成功回调")
+        print("123123 \(splashAd.tag)")
+        if splashAd.tag == loadSplashAdTag {
+            loadSplashAdResult?("didLoad")
+            removeLoadSplashAdView()
+        }
     }
 
     public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
-        removeSplashAdView()
+        removeShowSplashAdView()
+        if splashAd.tag == showSplashAdTag {
+            showSplashAdResult?("didFail")
+        } else if splashAd.tag == loadSplashAdTag {
+            loadSplashAdResult?("didFail")
+        }
     }
 
     // SDK渲染开屏广告关闭回调，当用户点击广告时会直接触发此回调
     public func splashAdDidClose(_ splashAd: BUSplashAdView) {
-        removeSplashAdView()
+        if splashAd.tag == showSplashAdTag {
+            showSplashAdResult?("didClose")
+            removeShowSplashAdView()
+        }
     }
 }
 
@@ -231,7 +269,7 @@ extension SwiftFlutterPangleAdPlugin: BUNativeExpressRewardedVideoAdDelegate {
 
     // 用户关闭广告时会触发此回调，注意：任何广告的关闭操作必须用户主动触发
     public func nativeExpressRewardedVideoAdDidClose(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        rewardResult?("AdDidClose")
+        showRewardResult?("AdDidClose")
     }
 
     // 点击回调方法
