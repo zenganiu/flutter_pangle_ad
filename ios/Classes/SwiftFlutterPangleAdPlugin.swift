@@ -221,7 +221,6 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
     }
     // 广告加载成功回调
     public func splashAdDidLoad(_ splashAd: BUSplashAdView) {
-        print("123123 \(splashAd.tag)")
         if splashAd.tag == loadSplashAdTag {
             loadSplashAdResult?("didLoad")
             removeLoadSplashAdView()
