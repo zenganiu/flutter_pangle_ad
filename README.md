@@ -1,6 +1,6 @@
 # flutter_pangle_ad
 
-A new Flutter project.
+穿山甲Flutter插件(目前仅支持iOS)
 
 ## Getting Started
 
