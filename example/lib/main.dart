@@ -24,9 +24,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState(){
     super.initState();
-    PangleAdPlugin.initialSDK(appId: "5112108",logLevel: 2);
+    PangleAdPlugin.initialSDK(appId: "5112114",logLevel: 2);
     initPlatformState();
-
   }
 
 
@@ -80,7 +79,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   ),
                   OutlinedButton(
                     onPressed: () async{
-                      var result = await PangleAdPlugin.showSplashAd(slotID: "887394289");
+                      var result = await PangleAdPlugin.showSplashAd(slotID: "887391515");
                       print('123123 $result');
                     },
                     child: Text('开屏广告'),
