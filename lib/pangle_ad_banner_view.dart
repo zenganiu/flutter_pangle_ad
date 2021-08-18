@@ -30,21 +30,23 @@ class _PangleAdBannerViewState extends State<PangleAdBannerView> {
   }
 
   Widget _getBannerView() {
+    Map<String, dynamic> params = {
+      'slotID': widget.slotID ?? "945912085",
+      'viewWidth': widget.viewWidth,
+      'viewHeight': widget.viewHeight,
+    };
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      Map<String, dynamic> params = {
-        'slotID': widget.slotID ?? "945912085",
-        'viewWidth': widget.viewWidth,
-        'viewHeight': widget.viewHeight,
-      };
-
       return UiKitView(
         viewType: 'PangleAdBannerView',
         creationParams: params,
         creationParamsCodec: const StandardMessageCodec(),
       );
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      // TODO: 待实现
-      return ErrorWidget('unsupport android');
+      return AndroidView(
+        viewType: 'PangleAdBannerView',
+        creationParams: params,
+        creationParamsCodec: const StandardMessageCodec(),
+      );
     } else {
       return ErrorWidget('unsupport Platform');
     }

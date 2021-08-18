@@ -26,6 +26,8 @@ import com.dmcb.huimin.pangleAd.flutter_pangle_ad.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.flutter.plugin.common.MethodChannel;
+
 public class SplashAd extends Activity {
 
     private TTAdNative mTTAdNative;
@@ -33,6 +35,14 @@ public class SplashAd extends Activity {
 
     //开屏广告加载超时时间,建议大于3000,这里为了冷启动第一次加载到广告并且展示,示例设置了3000ms
     private static int AD_TIME_OUT = 5000;
+
+    private static MethodChannel.Result mCallBack;
+    private static String mAdId;
+
+    public static void setCallBack(MethodChannel.Result _callBack, String adId) {
+        mCallBack = _callBack;
+        mAdId = adId;
+    }
 
     @SuppressWarnings("RedundantCast")
     @Override
@@ -52,14 +62,14 @@ public class SplashAd extends Activity {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        final int expressViewWidth = (int) (dm.widthPixels / dm.density);
-        int screenHeight = (int) (dm.heightPixels / dm.density);
+        final int expressViewWidth = (int) (dm.widthPixels);
+        int screenHeight = (int) (dm.heightPixels);
 
         final float _expressViewHeight = screenHeight * 0.15f;
         final float expressViewHeight = screenHeight * 0.85f;
 
         AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId(getIntent().getStringExtra("slotID"))
+                .setCodeId(mAdId)
                 .setExpressViewAcceptedSize(expressViewWidth, expressViewHeight)
                 .build();
 
@@ -116,7 +126,7 @@ public class SplashAd extends Activity {
                     //把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕高
                     mSplashContainer.addView(view, new FrameLayout.LayoutParams(expressViewWidth, (int) expressViewHeight));
                     ImageView imageView = new ImageView(getBaseContext());
-                    imageView.setImageResource(R.drawable.tt_ad_logo_small);
+                    imageView.setImageResource(R.drawable.logo);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
                     imageView.setBackgroundResource(R.color.color_333);
                     mSplashContainer.addView(imageView, new FrameLayout.LayoutParams(expressViewWidth, (int) _expressViewHeight, Gravity.BOTTOM));
@@ -232,6 +242,10 @@ public class SplashAd extends Activity {
             mTimer = null;
         }
         mSplashContainer.removeAllViews();
+        if (mCallBack != null) {
+            mCallBack.success(null);
+            mCallBack = null;
+        }
         finish();
     }
 

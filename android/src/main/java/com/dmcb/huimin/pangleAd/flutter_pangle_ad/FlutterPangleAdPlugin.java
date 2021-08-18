@@ -2,9 +2,9 @@ package com.dmcb.huimin.pangleAd.flutter_pangle_ad;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
 import com.bytedance.sdk.openadsdk.TTAdConfig;
@@ -35,6 +35,9 @@ public class FlutterPangleAdPlugin implements FlutterPlugin, MethodCallHandler {
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_pangle_ad");
         channel.setMethodCallHandler(this);
         mAppContext = flutterPluginBinding.getApplicationContext();
+
+        // 注冊组件
+        flutterPluginBinding.getPlatformViewRegistry().registerViewFactory("PangleAdBannerView", new NativeViewFactory());
     }
 
     @Override
@@ -75,7 +78,6 @@ public class FlutterPangleAdPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void success() {
                         Log.d("TTAdSdk", "初始化成功~");
-//                        result.success(true);
                     }
 
                     @Override
@@ -92,9 +94,9 @@ public class FlutterPangleAdPlugin implements FlutterPlugin, MethodCallHandler {
      * @param result
      */
     public void showSplashAd(MethodCall call, Result result) {
+        SplashAd.setCallBack(result, call.argument("slotID") + "");
         Intent intent = new Intent(mAppContext, SplashAd.class);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("slotID", call.argument("slotID") + "");
         mAppContext.startActivity(intent);
     }
 
