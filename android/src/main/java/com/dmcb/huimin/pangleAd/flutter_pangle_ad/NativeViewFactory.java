@@ -1,5 +1,6 @@
 package com.dmcb.huimin.pangleAd.flutter_pangle_ad;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -15,14 +16,17 @@ import io.flutter.plugin.platform.PlatformViewFactory;
 
 class NativeViewFactory extends PlatformViewFactory {
 
-    NativeViewFactory() {
+    private Activity mActivity;
+
+    NativeViewFactory(Activity activity) {
         super(StandardMessageCodec.INSTANCE);
+        mActivity = activity;
     }
 
     @NonNull
     @Override
     public PlatformView create(@NonNull Context context, int id, @Nullable Object args) {
         final Map<String, Object> creationParams = (Map<String, Object>) args;
-        return new BannerAd(context, id, creationParams);
+        return new BannerAd(context, id, creationParams, mActivity);
     }
 }

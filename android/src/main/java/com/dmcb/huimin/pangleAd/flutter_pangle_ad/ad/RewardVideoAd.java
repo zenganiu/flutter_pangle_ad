@@ -178,6 +178,6 @@ public class RewardVideoAd extends Activity {
     }
 
     private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

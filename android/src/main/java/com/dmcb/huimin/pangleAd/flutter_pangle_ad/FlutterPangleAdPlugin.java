@@ -14,6 +14,8 @@ import com.dmcb.huimin.pangleAd.flutter_pangle_ad.ad.RewardVideoAd;
 import com.dmcb.huimin.pangleAd.flutter_pangle_ad.ad.SplashAd;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -24,20 +26,20 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 /**
  * FlutterPangleAdPlugin
  */
-public class FlutterPangleAdPlugin implements FlutterPlugin, MethodCallHandler {
+public class FlutterPangleAdPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
 
     private MethodChannel channel;
 
     private Context mAppContext;
+
+    private FlutterPluginBinding mBinding;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_pangle_ad");
         channel.setMethodCallHandler(this);
         mAppContext = flutterPluginBinding.getApplicationContext();
-
-        // 注冊组件
-        flutterPluginBinding.getPlatformViewRegistry().registerViewFactory("PangleAdBannerView", new NativeViewFactory());
+        mBinding = flutterPluginBinding;
     }
 
     @Override
@@ -134,5 +136,26 @@ public class FlutterPangleAdPlugin implements FlutterPlugin, MethodCallHandler {
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
+    }
+
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        // 注冊组件
+        mBinding.getPlatformViewRegistry().registerViewFactory("PangleAdBannerView", new NativeViewFactory(binding.getActivity()));
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+
     }
 }

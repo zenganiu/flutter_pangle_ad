@@ -27,6 +27,7 @@ import io.flutter.plugin.platform.PlatformView;
 public class BannerAd implements PlatformView {
 
     private Context mContext;
+    private Activity mActivity;
 
     private TTNativeExpressAd mTTAd;
     private TTAdNative mTTAdNative;
@@ -34,15 +35,16 @@ public class BannerAd implements PlatformView {
 
     private View mView;
 
-    public BannerAd(@NonNull Context context, int id, @Nullable Map<String, Object> creationParams) {
+    public BannerAd(@NonNull Context context, int id, @Nullable Map<String, Object> creationParams, Activity activity) {
+        mActivity = activity;
         mContext = context;
         TTAdManager ttAdManager = TTAdSdk.getAdManager();
         mTTAdNative = ttAdManager.createAdNative(mContext);
         mView = View.inflate(mContext, R.layout.activity_banner_x, null);
         mExpressContainer = mView.findViewById(R.id.banner_ad);
         loadExpressAd(creationParams.get("slotID") + "",
-                Integer.parseInt(creationParams.get("viewWidth") + ""),
-                Integer.parseInt(creationParams.get("viewHeight") + ""));
+                Double.valueOf(creationParams.get("viewWidth") + "").intValue(),
+                Double.valueOf(creationParams.get("viewHeight") + "").intValue());
     }
 
     private void loadExpressAd(String id, int width, int height) {
@@ -132,7 +134,7 @@ public class BannerAd implements PlatformView {
      * @param ad
      */
     private void bindDislike(TTNativeExpressAd ad) {
-        ad.setDislikeCallback((Activity) mContext, new TTAdDislike.DislikeInteractionCallback() {
+        ad.setDislikeCallback(mActivity, new TTAdDislike.DislikeInteractionCallback() {
             @Override
             public void onShow() {
 

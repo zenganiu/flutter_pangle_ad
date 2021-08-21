@@ -250,6 +250,6 @@ public class SplashAd extends Activity {
     }
 
     private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }
