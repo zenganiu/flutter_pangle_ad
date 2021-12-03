@@ -1,11 +1,11 @@
 name: flutter_pangle_ad
 description: A new Flutter project.
-version: 0.0.4
+version: 0.0.5
 author: 1126981418@qq.com
 homepage: https://codeup.aliyun.com/5e97f942f89c9700014a4f00/dmc-front/flutter_pangle_ad
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.20.0"
 
 dependencies:
