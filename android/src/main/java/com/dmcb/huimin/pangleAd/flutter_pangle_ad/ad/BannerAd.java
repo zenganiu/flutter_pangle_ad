@@ -52,6 +52,7 @@ public class BannerAd implements PlatformView {
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(id)
                 .setAdCount(1)
+                .setIsAutoPlay(false)
                 .setExpressViewAcceptedSize(width, height)
                 .build();
         //step5:请求广告，对请求回调的广告作渲染处理
@@ -164,5 +165,8 @@ public class BannerAd implements PlatformView {
     @Override
     public void dispose() {
         mExpressContainer.removeAllViews();
+        if (mTTAd != null) {
+            mTTAd.destroy();
+        }
     }
 }

@@ -194,6 +194,11 @@ public class SplashAd extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+    }
+
+    @Override
     protected void onDestroy() {
         if (mTask != null) {
             mTask.cancel();
