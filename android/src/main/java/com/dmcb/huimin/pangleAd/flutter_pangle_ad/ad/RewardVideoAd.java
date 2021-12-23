@@ -123,6 +123,11 @@ public class RewardVideoAd extends Activity {
                     @Override
                     public void onSkippedVideo() {
                         showToast("onSkippedVideo");
+                        if (mCallBack != null) {
+                            mCallBack.success(null);
+                            mCallBack = null;
+                        }
+                        finish();
                     }
                 });
                 if (ad.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
