@@ -1,15 +1,25 @@
 # flutter_pangle_ad
 
-穿山甲Flutter插件(目前仅支持iOS)
+穿山甲Flutter插件
 
-## Getting Started
+## 使用
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+```dart
+import 'package:flutter_pangle_ad/flutter_pangle_ad.dart';
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+/// 初始化SDK
+PangleAdPlugin.initialSDK(appId: "xxx", logLevel: 2);
+
+/// 开屏广告
+var result = await PangleAdPlugin.showSplashAd(slotID: "xxx");
+
+/// 激励视频
+var result = await PangleAdPlugin.showRewardAd(slotID: 'xxx');
+
+/// flutter bannar widget
+PangleAdBannerView(slotID: 'xxx',viewHeight: 130,viewWidth: 300)
+
+```
+
+
 
