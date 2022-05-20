@@ -128,7 +128,7 @@ public class SplashAd extends Activity {
                     ImageView imageView = new ImageView(getBaseContext());
                     imageView.setImageResource(R.drawable.logo);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
-                    imageView.setBackgroundResource(R.color.color_333);
+                    imageView.setBackgroundResource(R.color.white);
                     mSplashContainer.addView(imageView, new FrameLayout.LayoutParams(expressViewWidth, (int) _expressViewHeight, Gravity.BOTTOM));
                     mClose = new TextView(getBaseContext());
                     mClose.setBackgroundColor(getBaseContext().getResources().getColor(R.color.color_333));

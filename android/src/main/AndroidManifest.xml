@@ -62,7 +62,7 @@
         <activity
             android:name=".ad.SplashAd"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
 
         <activity
             android:name=".ad.RewardVideoAd"
