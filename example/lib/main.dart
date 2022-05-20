@@ -16,6 +16,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String _platformVersion = 'Unknown';
 
+
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -73,15 +75,28 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   OutlinedButton(
                     onPressed: () async {
                       var result = await PangleAdPlugin.showSplashAd(
-                          slotID: "887391515");
+                        slotID: "887394289",
+                      );
                       print('123123 $result');
                     },
                     child: Text('开屏广告'),
                   ),
                   OutlinedButton(
                     onPressed: () async {
-                      var result = await PangleAdPlugin.showRewardAd(
-                          slotID: '945562374');
+                      var result = await PangleAdPlugin.showSplashAdWithLogo(
+                        slotID: "887394289",
+                        logoContainerHeight: 110,
+                        logoWidth: 135.5,
+                        logoHeight: 30,
+                        logoImageName: 'splashAd_logo',
+                      );
+                      print('123123 $result');
+                    },
+                    child: Text('带底部logo的开屏广告'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      var result = await PangleAdPlugin.showRewardAd(slotID: '945562374');
                       print('123123 $result');
                     },
                     child: Text('激励视频'),
