@@ -194,6 +194,7 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         ad.tolerateTimeout = tolerateTimeout
         ad.tag = showSplashAdWithLogoTag
         ad.delegate = self
+        ad.backgroundColor = .white
         showSplashAdWithLogoResult = result
 
         // logo
