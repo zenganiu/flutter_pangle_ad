@@ -16,11 +16,9 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
     /// 通道名称
     static let channelName = "flutter_pangle_ad"
 
-    private let showSplashAdTag: Int = 999
-    private let loadSplashAdTag: Int = 998
-    private let showRewardAdTag: Int = 997
-    private let loadRewardAdTag: Int = 996
-    private let showSplashAdWithLogoTag: Int = 1000
+    private let showSplashAdTag: Int = 997
+    private let showRewardAdTag: Int = 998
+    private let showSplashAdWithLogoTag: Int = 999
 
     /// 开屏广告
     var showSplashAdView: BUSplashAdView?
@@ -31,12 +29,9 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
     var rootViewController: UIViewController?
     var logoContainerView: UIView?
 
-
     var showSplashAdResult: FlutterResult?
     var showSplashAdWithLogoResult: FlutterResult?
     var showRewardResult: FlutterResult?
-
-
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: channelName, binaryMessenger: registrar.messenger())
@@ -65,7 +60,7 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
             showSplashAd(call, result: result)
 
         case "showSplashAdWithLogo":
-            
+
             showSplashAdWithLogo(call, result: result)
 
         case "showRewardAd":
@@ -126,7 +121,7 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
             result(dict)
             return
         }
-        
+
         let userId = call.getString(key: "userId") ?? ""
         let rewardName = call.getString(key: "rewardName") ?? ""
         let rewardAmount = call.getInt(key: "rewardAmount") ?? 0
@@ -203,15 +198,15 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
 
         // logo
         let logoContainerView = UIView(frame: .init(x: 0,
-                                           y: screenHeight - logoContainerHeight,
-                                           width: screenWidth,
-                                           height: logoContainerHeight))
+                                                    y: screenHeight - logoContainerHeight,
+                                                    width: screenWidth,
+                                                    height: logoContainerHeight))
         logoContainerView.backgroundColor = .white
         let logoImageView = UIImageView(image: UIImage(named: logoImageName))
         logoImageView.frame = .init(x: (screenWidth - logoWidth) / 2,
-                                y: (logoContainerHeight - logoHeight) / 2,
-                                width: logoWidth,
-                                height: logoHeight)
+                                    y: (logoContainerHeight - logoHeight) / 2,
+                                    width: logoWidth,
+                                    height: logoHeight)
         logoContainerView.addSubview(logoImageView)
         self.logoContainerView = logoContainerView
 
@@ -254,20 +249,14 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
     /// 返回的错误码(error)表示广告加载失败的原因，所有错误码详情请见链接
     ///  https://www.csjplatform.com/supportcenter/5421
     public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
-        
+        let dict: Dictionary<String, Any> = [
+            codeKey: "-1",
+            messageKey: "开屏广告加载失败: \(String(describing: error?.localizedDescription))",
+        ]
+        debugPrint(dict)
         if splashAd.tag == showSplashAdTag {
-            let dict: Dictionary<String, Any> = [
-                codeKey: "-1",
-                messageKey: "开屏广告加载失败: \(String(describing: error?.localizedDescription))",
-            ]
-            debugPrint(dict)
             showSplashAdResult?(dict)
         } else if splashAd.tag == showSplashAdWithLogoTag {
-            let dict: Dictionary<String, Any> = [
-                codeKey: "-1",
-                messageKey: "开屏广告加载失败: \(String(describing: error?.localizedDescription))",
-            ]
-            debugPrint(dict)
             showSplashAdWithLogoResult?(dict)
         }
         removeShowSplashAdView()
@@ -279,19 +268,14 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
 
     /// SDK渲染开屏广告关闭回调，当用户点击广告时会直接触发此回调，建议在此回调方法中直接进行广告对象的移除操作
     public func splashAdDidClose(_ splashAd: BUSplashAdView) {
+        let dict: Dictionary<String, Any> = [
+            codeKey: code_success,
+            messageKey: "开屏广告关闭回调",
+        ]
+        debugPrint(dict)
         if splashAd.tag == showSplashAdTag {
-            let dict: Dictionary<String, Any> = [
-                codeKey: code_success,
-                messageKey: "开屏广告关闭回调",
-            ]
-            debugPrint(dict)
             showSplashAdResult?(dict)
         } else if splashAd.tag == showSplashAdWithLogoTag {
-            let dict: Dictionary<String, Any> = [
-                codeKey: code_success,
-                messageKey: "开屏广告关闭回调",
-            ]
-            debugPrint(dict)
             showSplashAdWithLogoResult?(dict)
         }
         removeShowSplashAdView()
@@ -299,19 +283,14 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
 
     /// 倒计时为0时会触发此回调，如果客户端使用了此回调方法，建议在此回调方法中进行广告的移除操作
     public func splashAdCountdown(toZero splashAd: BUSplashAdView) {
+        let dict: Dictionary<String, Any> = [
+            codeKey: code_success,
+            messageKey: "开屏广告倒计时为0关闭回调",
+        ]
+        debugPrint(dict)
         if splashAd.tag == showSplashAdTag {
-            let dict: Dictionary<String, Any> = [
-                codeKey: code_success,
-                messageKey: "开屏广告倒计时为0关闭回调",
-            ]
-            debugPrint(dict)
             showSplashAdResult?(dict)
         } else if splashAd.tag == showSplashAdWithLogoTag {
-            let dict: Dictionary<String, Any> = [
-                codeKey: code_success,
-                messageKey: "开屏广告倒计时为0关闭回调",
-            ]
-            debugPrint(dict)
             showSplashAdWithLogoResult?(dict)
         }
         removeShowSplashAdView()
@@ -327,6 +306,12 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
 extension SwiftFlutterPangleAdPlugin: BUNativeExpressRewardedVideoAdDelegate {
     // 返回的错误码(error)表示广告加载失败的原因
     public func nativeExpressRewardedVideoAd(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd, didFailWithError error: Error?) {
+        let dict: Dictionary<String, Any> = [
+            codeKey: -1,
+            messageKey: "激励视频加载失败: \(String(describing: error?.localizedDescription))",
+        ]
+        debugPrint(dict)
+        showRewardResult?(dict)
     }
 
     // 渲染失败，网络原因或者硬件原因导致渲染失败,可以更换手机或者网络环境测试。
