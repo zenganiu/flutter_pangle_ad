@@ -1,14 +1,20 @@
 PODS:
-  - Ads-CN (3.4.4.3):
-    - Ads-CN/BUAdSDK (= 3.4.4.3)
-  - Ads-CN/BUAdSDK (3.4.4.3):
+  - Ads-CN (4.3.0.3):
+    - Ads-CN/BUAdSDK (= 4.3.0.3)
+  - Ads-CN/BUAdSDK (4.3.0.3):
     - Ads-CN/BUFoundation
     - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (3.4.4.3)
-  - Ads-CN/Domestic (3.4.4.3)
+  - Ads-CN/BUFoundation (4.3.0.3):
+    - BURelyFoundation (= 0.0.1.47)
+  - Ads-CN/Domestic (4.3.0.3)
+  - BURelyFoundation (0.0.1.47):
+    - BURelyFoundation/HM (= 0.0.1.47)
+    - BURelyFoundation/NETWork (= 0.0.1.47)
+  - BURelyFoundation/HM (0.0.1.47)
+  - BURelyFoundation/NETWork (0.0.1.47)
   - Flutter (1.0.0)
   - flutter_pangle_ad (0.0.1):
-    - Ads-CN (= 3.4.4.3)
+    - Ads-CN (= 4.3.0.3)
     - Flutter
 
 DEPENDENCIES:
@@ -16,8 +22,9 @@ DEPENDENCIES:
   - flutter_pangle_ad (from `.symlinks/plugins/flutter_pangle_ad/ios`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - Ads-CN
+    - BURelyFoundation
 
 EXTERNAL SOURCES:
   Flutter:
@@ -26,10 +33,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_pangle_ad/ios"
 
 SPEC CHECKSUMS:
-  Ads-CN: 57285da091f6a9035b78114c817f7e7fde8bff94
+  Ads-CN: f5871961bbe334135ecd62c4fde46bc80c36d4de
+  BURelyFoundation: 5e7f811867d3ee91ed20e426c505e31c55674256
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_pangle_ad: cda588e2d2617c2a95797aaae14b8af39bd8e0d4
+  flutter_pangle_ad: d02d205e1ecba9afff3b21a0699be260ef0d5fcf
 
-PODFILE CHECKSUM: 1d62be80675f50e63eb2f851d55ee75f09951c1b
+PODFILE CHECKSUM: 9f278f41f53a6b8936e96102b81ebde263a55b24
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
