@@ -112,34 +112,6 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         result(platformVersion)
     }
 
-    // MARK: - - 显示激励视频
-
-    private func showRewardAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let slotID = call.getString(key: "slotID") else {
-            let dict: Dictionary<String, Any> = [codeKey: "-1", messageKey: "slotID为必传参数，不能为空"]
-            debugPrint(dict)
-            result(dict)
-            return
-        }
-
-        let userId = call.getString(key: "userId") ?? ""
-        let rewardName = call.getString(key: "rewardName") ?? ""
-        let rewardAmount = call.getInt(key: "rewardAmount") ?? 0
-        let extra = call.getString(key: "extra") ?? ""
-
-        let model = BURewardedVideoModel()
-        model.userId = userId
-        model.rewardName = rewardName
-        model.rewardAmount = rewardAmount
-        model.extra = extra
-
-        showRewardResult = result
-        let ad = BUNativeExpressRewardedVideoAd(slotID: slotID, rewardedVideoModel: model)
-        ad.delegate = self
-        ad.loadData()
-        rewardedAd = ad
-    }
-
     // MARK: - - 显示开屏广告
 
     private func showSplashAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -149,9 +121,15 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
             result(dict)
             return
         }
+        
+        // 是否隐藏跳过按钮
+        let hideSkipButton = call.getBool(key: "hideSkipButton") ?? false
+        // 超时时间
+        let tolerateTimeout = call.getDouble(key: "tolerateTimeout") ?? 3.5
 
         let ad = BUSplashAdView(slotID: slotID, frame: UIScreen.main.bounds)
-        ad.tolerateTimeout = 10
+        ad.tolerateTimeout = tolerateTimeout
+        ad.hideSkipButton = hideSkipButton
         ad.delegate = self
         ad.tag = showSplashAdTag
         showSplashAdResult = result
@@ -214,13 +192,41 @@ public class SwiftFlutterPangleAdPlugin: NSObject, FlutterPlugin {
         ad.loadAdData()
         if let keyWindow = rootkeyWindow {
             keyWindow.rootViewController?.view.addSubview(ad)
-            if logoContainerHeight > 0 && logoHeight > 0 && logoContainerHeight > logoHeight {
+            if logoContainerHeight > 0 && logoHeight > 0 && logoContainerHeight > logoHeight && logoImageName.isEmpty == false {
                 keyWindow.rootViewController?.view.addSubview(logoContainerView)
             }
 
             ad.rootViewController = keyWindow.rootViewController
             showSplashAdView = ad
         }
+    }
+
+    // MARK: - - 显示激励视频
+
+    private func showRewardAd(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let slotID = call.getString(key: "slotID") else {
+            let dict: Dictionary<String, Any> = [codeKey: "-1", messageKey: "slotID为必传参数，不能为空"]
+            debugPrint(dict)
+            result(dict)
+            return
+        }
+
+        let userId = call.getString(key: "userId") ?? ""
+        let rewardName = call.getString(key: "rewardName") ?? ""
+        let rewardAmount = call.getInt(key: "rewardAmount") ?? 0
+        let extra = call.getString(key: "extra") ?? ""
+
+        let model = BURewardedVideoModel()
+        model.userId = userId
+        model.rewardName = rewardName
+        model.rewardAmount = rewardAmount
+        model.extra = extra
+
+        showRewardResult = result
+        let ad = BUNativeExpressRewardedVideoAd(slotID: slotID, rewardedVideoModel: model)
+        ad.delegate = self
+        ad.loadData()
+        rewardedAd = ad
     }
 }
 
