@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     } catch (e) {
-      print('initPlatformState: $e');
+      print('initPlatformState: ${e.toString()}');
     }
 
     if (mounted) {
@@ -91,6 +91,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       onPressed: () async {
         var result = await PangleAdPlugin.showSplashAd(
           slotID: splashAdSoltId,
+          hideSkipButton: true,
         );
         print('开屏广告: $result');
       },
