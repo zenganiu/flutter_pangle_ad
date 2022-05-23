@@ -25,12 +25,12 @@ class PangleAdPlugin {
   /// [slotID] 广告位id
   /// [hideSkipButton] 是否自定义跳过按钮 BOOL类型 默认为NO
   /// [tolerateTimeout] 默认超时时间为3.5s
-  /// [needSplashZoomOutAd] 是否需要点睛广告 默认为NO
+  /// [needSplashZoomOutAd] 是否需要点睛广告 默认为NO,注：3200-3500版本有效， 3600以及以上版本无效
   static Future showSplashAd({
     required String slotID,
     bool hideSkipButton = false,
     double tolerateTimeout = 3.5,
-    bool needSplashZoomOutAd = false,
+    @deprecated bool needSplashZoomOutAd = false,
   }) async {
     return await _channel.invokeMethod("showSplashAd", {
       'slotID': slotID,
@@ -72,6 +72,29 @@ class PangleAdPlugin {
     });
   }
 
+  /// 显示激励视频
+  ///
+  /// [slotID] 代码位ID
+  /// [userId] tag_id
+  /// [rewardName] 奖励名称
+  /// [rewardAmount] 奖励数量
+  /// [extra] 透传参数,应为json序列化后的字符串
+  static Future showRewardAd({
+    required String slotID,
+    String? userId,
+    String? rewardName,
+    int? rewardAmount,
+    String? extra,
+  }) async {
+    return await _channel.invokeMethod("showRewardAd", {
+      'slotID': slotID,
+      'userId': userId,
+      'rewardName': rewardName,
+      'rewardAmount': rewardAmount,
+      'extra': extra,
+    });
+  }
+
   /// 加载开屏广告
   ///
   /// [slotID] 广告位id
@@ -91,26 +114,6 @@ class PangleAdPlugin {
       'tolerateTimeout': tolerateTimeout,
       'needSplashZoomOutAd': needSplashZoomOutAd
     });
-
-
-  }
-
-  /// 显示激励视频
-  ///
-  /// [slotID] 代码位ID
-  /// [userId] tag_id
-  /// [rewardName] 奖励名称
-  /// [rewardAmount] 奖励数量
-  /// [extra] 透传参数,应为json序列化后的字符串
-  static Future showRewardAd({
-    required String slotID,
-    String? userId,
-    String? rewardName,
-    int? rewardAmount,
-    String? extra,
-  }) async {
-    return await _channel.invokeMethod("showRewardAd",
-        {'slotID': slotID, 'userId': userId, 'rewardName': rewardName, 'rewardAmount': rewardAmount, 'extra': extra});
   }
 
   /// 加载激励视频
@@ -128,7 +131,12 @@ class PangleAdPlugin {
     int? rewardAmount,
     String? extra,
   }) async {
-    return await _channel.invokeMethod("loadRewardAd",
-        {'slotID': slotID, 'userId': userId, 'rewardName': rewardName, 'rewardAmount': rewardAmount, 'extra': extra});
+    return await _channel.invokeMethod("loadRewardAd", {
+      'slotID': slotID,
+      'userId': userId,
+      'rewardName': rewardName,
+      'rewardAmount': rewardAmount,
+      'extra': extra,
+    });
   }
 }
