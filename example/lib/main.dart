@@ -91,7 +91,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       onPressed: () async {
         var result = await PangleAdPlugin.showSplashAd(
           slotID: splashAdSoltId,
-          hideSkipButton: true,
         );
         print('开屏广告: $result');
       },

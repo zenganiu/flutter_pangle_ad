@@ -16,7 +16,7 @@ class PangleAdPlugin {
   ///
   /// [appId] 穿山甲AppId
   /// [logLevel] 0-None,1-Error,2-Debug
-  static Future<bool> initialSDK({required String appId, int logLevel = 0}) async {
+  static Future initialSDK({required String appId, int logLevel = 0}) async {
     return await _channel.invokeMethod("initialSDK", {'appId': appId, 'logLevel': logLevel});
   }
 
