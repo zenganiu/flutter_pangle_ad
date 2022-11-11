@@ -39,8 +39,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await PangleAdPlugin.platformVersion;
-      String res1 = await PangleAdPlugin.loadRewardAd(slotID: rewardAdSoltId);
-      String res2 = await PangleAdPlugin.loadSplashAd(slotID: splashAdSoltId);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     } catch (e) {
@@ -91,7 +89,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       onPressed: () async {
         var result = await PangleAdPlugin.showSplashAd(
           slotID: splashAdSoltId,
-          hideSkipButton: true,
         );
         print('开屏广告: $result');
       },
