@@ -255,6 +255,8 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
 
     /// 返回的错误码(error)表示广告加载失败的原因
     public func splashAdLoadFail(_ splashAd: BUSplashAd, error: BUAdError?) {
+        self.splashAdResult?(MyResult.error(message: "开屏广告加载失败: \(error?.localizedDescription ?? "--")"))
+        self.splashAdWithLogoResult?(MyResult.error(message: "开屏广告加载失败: \(error?.localizedDescription ?? "--")"))
         printLog("splashAdLoadFail: \(error?.localizedDescription ?? "--")")
     }
 
@@ -287,6 +289,8 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
 
     /// SDK渲染开屏广告渲染失败回调
     public func splashAdRenderFail(_ splashAd: BUSplashAd, error: BUAdError?) {
+        self.splashAdResult?(MyResult.error(message: "开屏广告渲染失败: \(error?.localizedDescription ?? "--")"))
+        self.splashAdWithLogoResult?(MyResult.error(message: "开屏广告渲染失败: \(error?.localizedDescription ?? "--")"))
         removeShowSplashAdView()
         printLog("splashAdRenderFail: \(error?.localizedDescription ?? "")")
     }
@@ -309,6 +313,8 @@ extension SwiftFlutterPangleAdPlugin: BUSplashAdDelegate {
     /// SDK渲染开屏广告关闭回调，当用户点击广告时会直接触发此回调，建议在此回调方法中直接进行广告对象的移除操作
     public func splashAdDidClose(_ splashAd: BUSplashAd, closeType: BUSplashAdCloseType) {
         printLog("splashAdDidClose")
+        self.splashAdResult?(MyResult.success(message: "开屏广告关闭回调"))
+        self.splashAdWithLogoResult?(MyResult.success(message: "开屏广告关闭回调"))
         removeShowSplashAdView()
     }
 
