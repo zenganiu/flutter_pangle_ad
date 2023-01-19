@@ -1,6 +1,13 @@
 # flutter_pangle_ad
 
-穿山甲Flutter插件
+穿山甲广告Flutter插件
+
+## 安装
+
+```yaml
+  flutter_pangle_ad:
+    git: https://github.com/zenganiu/flutter_pangle_ad.git
+```
 
 ## 使用
 
